@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,11 +7,7 @@
     <title>Dashboard - Insurance Management System</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Outfit', sans-serif;
@@ -135,99 +131,92 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <h2> Insurance Management System</h2>
-        <div class="user-info">
-            <span>Welcome, ${sessionScope.userName}!</span>
-            <span class="role-badge">${sessionScope.userRole}</span>
-            <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Logout</a>
-        </div>
+<div class="navbar">
+    <h2>Insurance Management System</h2>
+    <div class="user-info">
+        <span>Welcome, ${sessionScope.userName}!</span>
+        <span class="role-badge">${sessionScope.userRole}</span>
+        <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="welcome">
+        <h3>Dashboard</h3>
+        <p>
+            <c:choose>
+                <c:when test="${sessionScope.userRole == 'Customer'}">
+                    Manage your insurance policies, file claims, and track applications.
+                </c:when>
+                <c:otherwise>
+                    Manage insurance operations, review applications, and oversee the system.
+                </c:otherwise>
+            </c:choose>
+        </p>
     </div>
 
-    <div class="container">
-        <div class="welcome">
-            <h3>Dashboard</h3>
+    <div class="menu-grid">
+        <c:if test="${sessionScope.userRole == 'Customer'}">
+            <a href="${pageContext.request.contextPath}/customer/application?action=new" class="menu-card highlight">
+                <h4>Apply for Insurance</h4>
+                <p>Submit a new insurance application</p>
+            </a>
+        </c:if>
+
+        <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/applications" class="menu-card">
+            <h4>Applications</h4>
             <p>
                 <c:choose>
-                    <c:when test="${sessionScope.userRole == 'Customer'}">
-                        Manage your insurance policies, file claims, and track applications.
-                    </c:when>
-                    <c:otherwise>
-                        Manage insurance operations, review applications, and oversee the system.
-                    </c:otherwise>
+                    <c:when test="${sessionScope.userRole == 'Customer'}">Track your applications</c:when>
+                    <c:otherwise>Review insurance applications</c:otherwise>
                 </c:choose>
             </p>
-        </div>
+        </a>
 
-        <div class="menu-grid">
-            <!-- CUSTOMERS: Apply for Insurance (Highlighted) -->
-            <c:if test="${sessionScope.userRole == 'Customer'}">
-                <a href="${pageContext.request.contextPath}/customer/application?action=new" class="menu-card highlight">
-                    <h4> Apply for Insurance</h4>
-                    <p>Submit a new insurance application</p>
-                </a>
-            </c:if>
+        <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/policies" class="menu-card">
+            <h4>Policies</h4>
+            <p>
+                <c:choose>
+                    <c:when test="${sessionScope.userRole == 'Customer'}">View your active policies</c:when>
+                    <c:otherwise>Manage all policies</c:otherwise>
+                </c:choose>
+            </p>
+        </a>
 
-            <!-- Applications - All can view -->
-            <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/applications" class="menu-card">
-                <h4>Applications</h4>
-                <p>
-                    <c:choose>
-                        <c:when test="${sessionScope.userRole == 'Customer'}">Track your applications</c:when>
-                        <c:otherwise>Review insurance applications</c:otherwise>
-                    </c:choose>
-                </p>
+        <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/claims" class="menu-card">
+            <h4>Claims</h4>
+            <p>
+                <c:choose>
+                    <c:when test="${sessionScope.userRole == 'Customer'}">File and track claims</c:when>
+                    <c:otherwise>Process insurance claims</c:otherwise>
+                </c:choose>
+            </p>
+        </a>
+
+        <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/payments" class="menu-card">
+            <h4>Payments</h4>
+            <p>
+                <c:choose>
+                    <c:when test="${sessionScope.userRole == 'Customer'}">View payment history</c:when>
+                    <c:otherwise>Manage payments</c:otherwise>
+                </c:choose>
+            </p>
+        </a>
+
+        <c:if test="${sessionScope.userRole == 'Admin' || sessionScope.userRole == 'Manager'}">
+            <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/users" class="menu-card">
+                <h4>Users</h4>
+                <p>Manage system users</p>
             </a>
+        </c:if>
 
-            <!-- Policies - All can view -->
-            <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/policies" class="menu-card">
-                <h4> Policies</h4>
-                <p>
-                    <c:choose>
-                        <c:when test="${sessionScope.userRole == 'Customer'}">View your active policies</c:when>
-                        <c:otherwise>Manage all policies</c:otherwise>
-                    </c:choose>
-                </p>
+        <c:if test="${sessionScope.userRole == 'Admin' || sessionScope.userRole == 'Manager'}">
+            <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/reports" class="menu-card">
+                <h4>Reports</h4>
+                <p>View system reports</p>
             </a>
-
-            <!-- Claims - All can file -->
-            <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/claims" class="menu-card">
-                <h4>Claims</h4>
-                <p>
-                    <c:choose>
-                        <c:when test="${sessionScope.userRole == 'Customer'}">File and track claims</c:when>
-                        <c:otherwise>Process insurance claims</c:otherwise>
-                    </c:choose>
-                </p>
-            </a>
-
-            <!-- Payments - All can view -->
-            <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/payments" class="menu-card">
-                <h4> Payments</h4>
-                <p>
-                    <c:choose>
-                        <c:when test="${sessionScope.userRole == 'Customer'}">View payment history</c:when>
-                        <c:otherwise>Manage payments</c:otherwise>
-                    </c:choose>
-                </p>
-            </a>
-
-            <!-- Users - Admin and Manager ONLY -->
-            <c:if test="${sessionScope.userRole == 'Admin' || sessionScope.userRole == 'Manager'}">
-                <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/users" class="menu-card">
-                    <h4> Users</h4>
-                    <p>Manage system users</p>
-                </a>
-            </c:if>
-
-            <!-- Reports - Admin and Manager ONLY -->
-            <c:if test="${sessionScope.userRole == 'Admin' || sessionScope.userRole == 'Manager'}">
-                <a href="${pageContext.request.contextPath}/${sessionScope.userRole.toLowerCase()}/reports" class="menu-card">
-                    <h4>Reports</h4>
-                    <p>View system reports</p>
-                </a>
-            </c:if>
-        </div>
+        </c:if>
     </div>
+</div>
 </body>
 </html>

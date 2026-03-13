@@ -12,7 +12,17 @@
     </welcome-file-list>
 
     <session-config>
+        <tracking-mode>COOKIE</tracking-mode>
+
+        <cookie-config>
+            <http-only>true</http-only>
+            <!-- CRITICAL for localhost in modern browsers -->
+            <secure>false</secure>
+            <!-- Lax allows redirects/navigation to keep JSESSIONID -->
+            <same-site>Lax</same-site>
+        </cookie-config>
+
         <session-timeout>30</session-timeout>
     </session-config>
-    
+
 </web-app>
