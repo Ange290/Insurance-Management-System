@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,11 +7,7 @@
     <title>Login - Insurance Management System</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Outfit', sans-serif;
@@ -31,31 +27,13 @@
             max-width: 400px;
         }
 
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        .logo { text-align: center; margin-bottom: 30px; }
+        .logo h2 { color: #84cc16; font-size: 32px; font-weight: 700; }
+        .logo p { color: #6b7280; margin-top: 5px; }
 
-        .logo h2 {
-            color: #84cc16;
-            font-size: 32px;
-            font-weight: 700;
-        }
+        h3 { color: #1f2937; margin-bottom: 25px; text-align: center; }
 
-        .logo p {
-            color: #6b7280;
-            margin-top: 5px;
-        }
-
-        h3 {
-            color: #1f2937;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         label {
             display: block;
@@ -64,8 +42,7 @@
             font-weight: 500;
         }
 
-        input[type="text"],
-        input[type="password"] {
+        input[type="text"], input[type="password"] {
             width: 100%;
             padding: 12px;
             border: 2px solid #e5e7eb;
@@ -81,9 +58,7 @@
             box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.1);
         }
 
-        .required {
-            color: #ef4444;
-        }
+        .required { color: #ef4444; }
 
         .btn {
             width: 100%;
@@ -104,21 +79,9 @@
             box-shadow: 0 5px 15px rgba(132, 204, 22, 0.4);
         }
 
-        .register-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #6b7280;
-        }
-
-        .register-link a {
-            color: #84cc16;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
+        .register-link { text-align: center; margin-top: 20px; color: #6b7280; }
+        .register-link a { color: #84cc16; text-decoration: none; font-weight: 600; }
+        .register-link a:hover { text-decoration: underline; }
 
         .error {
             background: #fee2e2;
@@ -140,41 +103,39 @@
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="logo">
-            <h2>🛡️ Insurance System</h2>
-            <p>Your protection, our priority</p>
-        </div>
-
-        <h3>Login to Your Account</h3>
-
-        <c:if test="${not empty error}">
-            <div class="error">${error}</div>
-        </c:if>
-
-        <c:if test="${not empty success}">
-            <div class="success">${success}</div>
-        </c:if>
-
-        <form action="${pageContext.request.contextPath}/login" method="post">
-            <div class="form-group">
-                <label for="username">Email Address <span class="required">*</span></label>
-                <input type="text" id="username" name="username" required
-                       placeholder="Enter your email">
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password <span class="required">*</span></label>
-                <input type="password" id="password" name="password" required
-                       placeholder="Enter your password">
-            </div>
-
-            <button type="submit" class="btn">Login</button>
-        </form>
-
-        <div class="register-link">
-            Don't have an account? <a href="${pageContext.request.contextPath}/register">Register here</a>
-        </div>
+<div class="login-container">
+    <div class="logo">
+        <h2>Insurance System</h2>
+        <p>Your protection, our priority</p>
     </div>
+
+    <h3>Login to Your Account</h3>
+
+    <c:if test="${not empty error}">
+        <div class="error"><c:out value="${error}"/></div>
+    </c:if>
+
+    <c:if test="${not empty success}">
+        <div class="success"><c:out value="${success}"/></div>
+    </c:if>
+
+    <form action="${pageContext.request.contextPath}/login" method="post">
+        <div class="form-group">
+            <label for="username">Email Address <span class="required">*</span></label>
+            <input type="text" id="username" name="username" required placeholder="Enter your email">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password <span class="required">*</span></label>
+            <input type="password" id="password" name="password" required placeholder="Enter your password">
+        </div>
+
+        <button type="submit" class="btn">Login</button>
+    </form>
+
+    <div class="register-link">
+        Don't have an account? <a href="${pageContext.request.contextPath}/register">Register here</a>
+    </div>
+</div>
 </body>
 </html>

@@ -25,28 +25,43 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-        HttpSession session = httpRequest.getSession(false);
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
 
-        String loginURI = httpRequest.getContextPath() + "/login.jsp";
-        String uri = httpRequest.getRequestURI();
+        String contextPath = req.getContextPath();
+        String uri = req.getRequestURI();
+        String path = req.getServletPath(); // safer than contains()
 
-        boolean loggedIn = (session != null && session.getAttribute("user") != null);
+        // Allow public endpoints
+        boolean isLogin = path.equals("/") || path.equals("/login");
+        boolean isRegister = path.equals("/register");
+        boolean isLogout = path.equals("/logout");
 
-        boolean loginRequest = uri.contains("login");
-        boolean registerRequest = uri.contains("register");
+        // Allow static resources
+        boolean isStatic =
+                uri.startsWith(contextPath + "/css/") ||
+                        uri.startsWith(contextPath + "/js/") ||
+                        uri.startsWith(contextPath + "/images/") ||
+                        uri.startsWith(contextPath + "/bootstrap/") ||
+                        uri.startsWith(contextPath + "/fonts/");
 
-        boolean staticResource =
-                uri.contains("/css/") ||
-                        uri.contains("/js/") ||
-                        uri.contains("/images/") ||
-                        uri.contains("/bootstrap/");
+        // Allow JSP access only if you really need it (optional).
+        // Since your JSPs are under /WEB-INF/views, they are not directly accessible anyway.
 
-        if (loggedIn || loginRequest || registerRequest || staticResource) {
+        if (isLogin || isRegister || isLogout || isStatic) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // Check session login
+        HttpSession session = req.getSession(false);
+        boolean loggedIn = (session != null && session.getAttribute("userId") != null);
+
+        if (loggedIn) {
             chain.doFilter(request, response);
         } else {
-            httpResponse.sendRedirect(loginURI);
+            // IMPORTANT: redirect to the servlet /login (NOT /login.jsp)
+            res.sendRedirect(contextPath + "/login");
         }
     }
 
